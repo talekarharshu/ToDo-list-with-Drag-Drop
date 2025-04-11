@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weakly Schedule</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="parent">
+      <h1>To Do List</h1>
+      <input type="text" id="task-input" placeholder="Enter Your Text" />
+      <div class="btn">
+        <button id="add-task" onclick="insert()">Add Item</button>
+        <button onclick="location.reload()">Reset List</button>
+        <button onclick="edit()">Edit</button>
+      </div>
+
+      <ul id="todo" class="content"></ul>
+    </div>
+
+    <div class="container">
+      <div class="days" id="sun"><h3>SUNDAY</h3></div>
+      <div class="days" id="mon"><h3>MONDAY</h3></div>
+      <div class="days" id="tue"><h3>TUESDAY</h3></div>
+      <div class="days" id="wed"><h3>WEDNESDAY</h3></div>
+      <div class="days" id="thu"><h3>THURSDAY</h3></div>
+      <div class="days" id="fri"><h3>FRIDAY</h3></div>
+      <div class="days" id="sat"><h3>SATURDAY</h3></div>
+    </div>
+
+    <script>
+  let input = document.querySelector("input");
+
+  function insert() {
+    if (input.value === "") {
+      alert("Enter Some Text in List");
+      return;
+    }
+
+    // Create new list item
+    const list = document.createElement("li");
+    list.textContent = input.value;
+    list.setAttribute("draggable", "true");
+    list.classList.add("todo-item");
+
+    // Create delete button
+     const delBtn = document.createElement("button");
+    delBtn.textContent = "Delete";
+     delBtn.addEventListener("click", () => {
+       list.remove();
+     });
+
+    // list.appendChild(delBtn);
+
+    // Add drag events
+    list.addEventListener("dragstart", () => {
+      selected = list;
+      setTimeout(() => list.style.display = "none", 0);
+    });
+
+    list.addEventListener("dragend", () => {
+      setTimeout(() => {
+        list.style.display = "block";
+        selected = null;
+      }, 0);
+    });
+
+   
+   
+    // Append to the todo list
+    document.getElementById("todo").appendChild(list);
+    input.value = "";
+  }
+
+  function edit() {
+    if (document.designMode === "off") {
+      document.designMode = "on";
+      console.log("Edit Mode On");
+    } else {
+      document.designMode = "off";
+      console.log("Edit Mode Off");
+    }
+  }
+
+
+
+  // Enable drag and drop on the todo list items
+  // Enable drop on day columns
+  let selected = null;
+  const days = document.querySelectorAll(".days");
+
+  days.forEach((day) => {
+    day.addEventListener("dragover", (e) => {
+      e.preventDefault();
+    });
+
+    day.addEventListener("drop", (e) => {
+      e.preventDefault();
+      if (selected) {
+        day.appendChild(selected);
+        selected = null;
+      }
+    });
+  });
+
+
+
+    </script>
+  </body>
+</html>
